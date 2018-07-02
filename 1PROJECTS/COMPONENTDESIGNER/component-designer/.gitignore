@@ -1,0 +1,5 @@
+bin/*
+/bin
+.javacomponentdesigner*
+/thumbnails/
+component-designer-db.*

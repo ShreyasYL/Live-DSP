@@ -1,0 +1,24 @@
+apply plugin: 'java'
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+        resources {
+            srcDirs = ['src']
+        }
+    }
+}
+
+repositories { 
+maven {
+url 'http://repo1.maven.org/maven2'
+}
+}
+
+dependencies {
+    compile project(':external-libs')
+    compile project(':util')
+    compile project(':audio-services')
+}

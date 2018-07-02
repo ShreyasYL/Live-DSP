@@ -1,0 +1,21 @@
+For release 0.0.4:
+------------------
+
+* Demote spectral roller to alpha (put off the re-work until 0.0.4)
+
+* Fix spectral roller to include "Scale" selection and put amp/freq scales.
+
+* Look into sensible way for multi-arch checkin/build of native libs.
+
+* Fix up sound file metadata handling so we the user can override discovered metadata and we can start to fix up the BPM handling.
+
+* Look into find a way that sub-rack changes avoid a double fade - would be nice to fade in the new sub-rack in parallel with fading out the old sub-rack. May be tricky due to multi-output. Would still be nice to have as a feature of the rack.
+
+* Clicking in a slider outside of the handle and holding down should gradually jump in that direction.
+
+Oustanding issues:
+------------------
+
+* Component versioning
+* Database versioning + migration
+* Exporting soundfile + metadata library as XML/json

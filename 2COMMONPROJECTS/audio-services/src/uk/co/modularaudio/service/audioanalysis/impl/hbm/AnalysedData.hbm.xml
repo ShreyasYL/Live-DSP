@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+	
+	<hibernate-mapping package="uk.co.modularaudio.service.audioanalysis">
+		<class name="AnalysedData" table="ANALYSED_DATA">
+			<id name="analysisId" column="ANALYSIS_ID">
+    			<generator class="sequence">
+    				<param name="sequence">ANALYSIS_SEQ</param>
+    			</generator>
+    		</id>
+
+    		<property name="creationTimestamp" generated="insert" update="false" insert="false">
+    			<column name="CREATION_TIMESTAMP" sql-type="timestamp" default="CURRENT_TIMESTAMP" not-null="true"/>
+    		</property>
+
+            <property name="libraryEntryId" column="LIBRARY_ENTRY_ID" type="int" unique="true"/>
+            
+            <property name="bpm" column="BPM" type="float"/>
+            <property name="absPeakDb" column="ABS_PEAK_DB" type="float"/>
+            <property name="rmsPeakDb" column="RMS_PEAK_DB" type="float"/>
+            <property name="rmsAverageDb" column="RMS_AVERAGE_DB" type="float"/>
+            
+    		<property name="pathToStaticThumbnail" column="STHUMB_PATH" length="1024" unique="true"/>
+		</class>
+	</hibernate-mapping>
+	

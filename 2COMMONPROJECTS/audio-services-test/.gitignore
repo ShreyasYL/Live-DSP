@@ -1,0 +1,11 @@
+/bin/
+hs_err*
+audio-services-test.properties
+audio-services-test.script
+/thumbnails/
+/wavetablecache/
+componentdesignersql.*
+.javacomponentdesigner
+userpatches
+usersubrackpatches
+tmpoutput

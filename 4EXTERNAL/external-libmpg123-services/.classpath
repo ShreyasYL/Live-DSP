@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/audio-services"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/external-libmpg123-wrapper"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/external-libs"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/util"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/util-audio"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/util-external"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

@@ -1,0 +1,134 @@
+apply plugin: 'java'
+
+version = '0.0.3'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+def applicationName = 'mad-pp'
+def applicationNameAndVersion = applicationName + '-' + version
+def releasedir = applicationNameAndVersion
+def releaseball = applicationNameAndVersion + '.tar.gz'
+
+repositories { 
+maven {
+url 'http://repo1.maven.org/maven2'
+}
+}
+
+dependencies {
+  compile project(':external-libs')
+  compile project(':util')
+  compile project(':util-test')
+  compile project(':util-audio')
+  compile project(':util-audio-test')
+  compile project(':util-gui')
+  compile project(':util-gui-test')
+  compile project(':util-audio-gui')
+  compile project(':util-audio-gui-test')
+  compile project(':common-services')
+  compile project(':common-services-test')
+  compile project(':audio-services')
+  compile project(':audio-services-test')
+  compile project(':external-libmpg123-wrapper')
+  compile project(':external-libsndfile-wrapper')
+  compile project(':component-designer-services')
+  compile project(':component-designer')
+  compile project(':component-designer-test')
+  compile project(':external-libsndfile-services')
+  compile project(':external-libsndfile-services-test')
+  compile project(':external-libmpg123-services')
+  compile project(':external-libmpg123-services-test')
+}
+
+task appJar(type: Jar) {
+  baseName = applicationName
+  manifest {
+    attributes 'Main-Class': 'uk.co.modularaudio.componentdesigner.ComponentDesigner'
+  }
+  from {
+    subprojects.jar.archivePath.collect {
+      zipTree(it)
+    }
+  }
+}
+
+appJar.dependsOn build
+
+test {
+  systemProperties = System.getProperties();
+  systemProperties['org.jboss.logging.provider'] = 'slf4j'
+}
+
+task copyNativeLibs(type: Copy) {
+  from '4EXTERNAL/external-libmpg123-wrapper/lib/libmpg123_wrap.so'
+  from '4EXTERNAL/external-libmpg123-wrapper/lib/libmpg123_wrap.dylib'
+  from '4EXTERNAL/external-libsndfile-wrapper/lib/libsndfile_wrap.so'
+  from '4EXTERNAL/external-libsndfile-wrapper/lib/libsndfile_wrap.dylib'
+  into releasedir + '/natives'
+}
+
+task copyLaunchScripts(type: Copy) {
+  from '1PROJECTS/COMPONENTDESIGNER/component-designer/scripts'
+  include '*.sh'
+  include '*.bat'
+  into releasedir
+}
+
+task copySupportJars(type: Copy) {
+  from '4EXTERNAL/external-libs/libs'
+  into releasedir + '/supportlibs'
+}
+
+copySupportJars.dependsOn(':external-libs:get_libs')
+
+task copyCdJar(type: Copy) {
+  from 'build/libs/' + applicationNameAndVersion + '.jar'
+  into releasedir
+}
+
+copyCdJar.dependsOn build
+
+task copyUserPatches(type: Copy) {
+  from '1PROJECTS/COMPONENTDESIGNER/component-designer/userpatches'
+  into releasedir + '/userpatches'
+}
+
+task copyUserSubRackPatches(type: Copy) {
+  from '1PROJECTS/COMPONENTDESIGNER/component-designer/usersubrackpatches'
+  into releasedir + '/usersubrackpatches'
+}
+
+task appSupportFiles(type: JavaExec) {
+  classpath += project(':component-designer').sourceSets.main.runtimeClasspath
+  main = "uk.co.modularaudio.componentdesigner.generators.ComponentDesignerSupportFileGenerator"
+  jvmArgs = [
+      '-Djava.library.path=../4EXTERNAL/external-libsndfile-wrapper/lib:../4EXTERNAL/external-libmpg123-wrapper/lib',
+      '-Dorg.jboss.logging.provider=slf4j',
+      '-Djava.awt.headless=true'
+  ]
+  args = [
+      '.',
+      '/home/shreyas/Downloads/mad-java-0.0.3/2COMMONPROJECTS/audio-services-images/images'
+  ]
+  workingDir = releasedir
+}
+
+appSupportFiles.dependsOn build, copyNativeLibs, copyLaunchScripts,
+  copySupportJars, copyCdJar, copyUserPatches, copyUserSubRackPatches
+
+task appRelease(type:Exec) {
+    commandLine 'tar'
+    args '-zcf', releaseball, releasedir
+}
+
+appRelease.dependsOn build, appJar, appSupportFiles
+
+task appReleaseClean {
+  doLast {
+    def maindir = file(releasedir)
+    maindir.deleteDir()
+    def mainball = file(releaseball)
+    mainball.delete()
+  }
+}
+
+clean.dependsOn appReleaseClean

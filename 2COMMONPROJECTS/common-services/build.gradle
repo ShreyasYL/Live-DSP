@@ -1,0 +1,26 @@
+apply plugin: 'java'
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+        resources {
+            srcDirs = ['src']
+            exclude '**/*.java'
+            exclude '**/*.html'
+        }
+    }
+}
+
+repositories { 
+maven {
+url 'http://repo1.maven.org/maven2'
+}
+}
+
+dependencies {
+    compile project(':external-libs')
+    compile project(':util')
+    compile project(':util-external')
+}

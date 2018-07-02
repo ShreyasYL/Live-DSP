@@ -1,0 +1,9 @@
+*~
+.pmd
+build
+.gradle
+wavetablecache
+releasedir
+mad-pp-*
+.javamadpp.properties
+.javamadpp
